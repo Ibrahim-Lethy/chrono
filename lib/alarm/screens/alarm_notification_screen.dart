@@ -13,6 +13,7 @@ import 'package:clock_app/navigation/types/alignment.dart';
 import 'package:clock_app/notifications/widgets/notification_actions/slide_notification_action.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AlarmNotificationScreen extends StatefulWidget {
   const AlarmNotificationScreen({
@@ -65,6 +66,7 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
   @override
   void initState() {
     super.initState();
+    SharedPreferences.getInstance().then((p) => p.setBool('alarm_active', true));
 
     Alarm? currentAlarm = getAlarmById(widget.scheduleId);
     if (currentAlarm == null) {
@@ -98,6 +100,12 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
   void _snoozeAlarm() {
     dismissAlarmNotification(widget.scheduleId, AlarmDismissType.snooze,
         ScheduledNotificationType.alarm);
+  }
+
+  @override
+  void dispose() {
+    SharedPreferences.getInstance().then((p) => p.setBool('alarm_active', false));
+    super.dispose();
   }
 
   @override

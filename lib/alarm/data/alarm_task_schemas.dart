@@ -3,6 +3,7 @@ import 'package:clock_app/alarm/widgets/tasks/math_task.dart';
 import 'package:clock_app/alarm/widgets/tasks/memory_task.dart';
 import 'package:clock_app/alarm/widgets/tasks/retype_task.dart';
 import 'package:clock_app/alarm/widgets/tasks/sequence_task.dart';
+import 'package:clock_app/alarm/widgets/tasks/qr_task.dart';
 import 'package:clock_app/settings/types/setting.dart';
 import 'package:clock_app/settings/types/setting_group.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -113,6 +114,15 @@ Map<AlarmTaskType, AlarmTaskSchema> alarmTaskSchemasMap = {
     ]),
     (onSolve, settings) {
       return MemoryTask(onSolve: onSolve, settings: settings);
+    },
+  ),
+  AlarmTaskType.qrCode: AlarmTaskSchema(
+    (context) => "Scan QR Code",
+    SettingGroup("QR Code", (context) => "QR Code Settings", [
+      StringSetting("Expected QR Content", (context) => "Scan a QR code to save it", ""),
+    ]),
+    (onSolve, settings) {
+      return QrTask(onSolve: onSolve, settings: settings);
     },
   ),
 };
