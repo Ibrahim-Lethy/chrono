@@ -4,6 +4,7 @@ import 'package:clock_app/developer/data/developer_settings_schema.dart';
 import 'package:clock_app/settings/data/accessibility_settings_schema.dart';
 import 'package:clock_app/settings/data/backup_settings_schema.dart';
 import 'package:clock_app/settings/data/general_settings_schema.dart';
+import 'package:clock_app/settings/data/protection_settings_schema.dart';
 import 'package:clock_app/settings/screens/about_screen.dart';
 import 'package:clock_app/settings/screens/protection_screen.dart';
 import 'package:clock_app/settings/types/setting_group.dart';
@@ -17,7 +18,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 
 // Increment this after every schema change
-const int settingsSchemaVersion = 7;
+const int settingsSchemaVersion = 8;
 
 SettingGroup appSettings = SettingGroup(
   "Settings",
@@ -35,6 +36,7 @@ SettingGroup appSettings = SettingGroup(
     accessibilitySettingsSchema,
     backupSettingsSchema,
     developerSettingsSchema,
+    ...protectionPreferenceSettings,
     SettingPageLink(
       "Protection",
       (context) => "Protection",

@@ -15,6 +15,7 @@ import 'package:clock_app/common/types/schedule_id.dart';
 import 'package:clock_app/common/types/tag.dart';
 import 'package:clock_app/common/utils/list_storage.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
+import 'package:clock_app/system/protection_preferences.dart';
 import 'package:clock_app/stopwatch/types/stopwatch.dart';
 import 'package:clock_app/theme/data/default_color_schemes.dart';
 import 'package:clock_app/theme/data/default_style_themes.dart';
@@ -90,4 +91,5 @@ Future<void> initializeSettings() async {
   }
 
   await appSettings.load();
+  await ProtectionPreferences.syncSettingsToNative();
 }
