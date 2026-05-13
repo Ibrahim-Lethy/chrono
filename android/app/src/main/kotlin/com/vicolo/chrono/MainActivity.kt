@@ -4,6 +4,7 @@ import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
@@ -23,6 +24,8 @@ class MainActivity: FlutterActivity() {
                     "removeDeviceAdmin"   -> { removeDeviceAdmin(); result.success(null) }
                     "isAccessibilityServiceEnabled" -> result.success(isAccessibilityEnabled())
                     "openAccessibilitySettings"     -> { openAccessibilitySettings(); result.success(null) }
+                    "openAppSettings"               -> { openAppSettings(); result.success(null) }
+                    "openDeviceAdminSettings"       -> { openDeviceAdminSettings(); result.success(null) }
                     else -> result.notImplemented()
                 }
             }
@@ -64,6 +67,19 @@ class MainActivity: FlutterActivity() {
 
     private fun openAccessibilitySettings() {
         startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    }
+
+    private fun openAppSettings() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+            data = Uri.parse("package:$packageName")
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        startActivity(intent)
+    }
+
+    private fun openDeviceAdminSettings() {
+        startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 }

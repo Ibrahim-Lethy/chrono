@@ -24,4 +24,12 @@ class NativeFeaturesService {
   static Future<void> openAccessibilitySettings() async {
     await _channel.invokeMethod('openAccessibilitySettings');
   }
+
+  static Future<void> openAppSettings() async {
+    await _channel.invokeMethod('openAppSettings');
+  }
+
+  static Future<void> openDeviceAdminSettings() async {
+    await _channel.invokeMethod('openDeviceAdminSettings');
+  }
 }
