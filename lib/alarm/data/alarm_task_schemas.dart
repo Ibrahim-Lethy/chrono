@@ -1,6 +1,7 @@
 import 'package:clock_app/alarm/types/alarm_task.dart';
 import 'package:clock_app/alarm/widgets/tasks/math_task.dart';
 import 'package:clock_app/alarm/widgets/tasks/memory_task.dart';
+import 'package:clock_app/alarm/widgets/tasks/nfc_task.dart';
 import 'package:clock_app/alarm/widgets/tasks/retype_task.dart';
 import 'package:clock_app/alarm/widgets/tasks/sequence_task.dart';
 import 'package:clock_app/alarm/widgets/tasks/qr_task.dart';
@@ -123,6 +124,15 @@ Map<AlarmTaskType, AlarmTaskSchema> alarmTaskSchemasMap = {
     ]),
     (onSolve, settings) {
       return QrTask(onSolve: onSolve, settings: settings);
+    },
+  ),
+  AlarmTaskType.nfc: AlarmTaskSchema(
+    (context) => "Scan NFC Tag",
+    SettingGroup("NFC Tag", (context) => "NFC Tag Settings", [
+      StringSetting("Expected NFC Tag", (context) => "Scan an NFC tag to save it", ""),
+    ]),
+    (onSolve, settings) {
+      return NfcTask(onSolve: onSolve, settings: settings);
     },
   ),
 };
