@@ -7,6 +7,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import org.json.JSONArray
+import org.json.JSONObject
 
 class AlarmAccessibilityService : AccessibilityService() {
 
@@ -18,8 +20,14 @@ class AlarmAccessibilityService : AccessibilityService() {
         val pkg = event.packageName?.toString() ?: return
         val cls = event.className?.toString() ?: return
 
-        if ((isPowerProtectionEnabled() && isPowerDialog(pkg, cls)) ||
-            (isAdminProtectionEnabled() && isSettingsEscapeSurface(pkg, cls))) {
+        val reason = when {
+            isPowerProtectionEnabled() && isPowerDialog(pkg, cls) -> "power_menu"
+            isAdminProtectionEnabled() && isSettingsEscapeSurface(pkg, cls) -> "settings_escape"
+            else -> null
+        }
+
+        if (reason != null) {
+            recordEscapeAttempt(reason, pkg, cls)
             blockEscapeAttempt()
         }
     }
@@ -31,12 +39,14 @@ class AlarmAccessibilityService : AccessibilityService() {
 
     private fun isPowerProtectionEnabled(): Boolean {
         val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-        return prefs.getBoolean("flutter.protection_power_off_enabled", false)
+        return prefs.getBoolean("flutter.protection_power_off_enabled", false) &&
+               prefs.getBoolean("flutter.protection_active_power_off", false)
     }
 
     private fun isAdminProtectionEnabled(): Boolean {
         val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
-        return prefs.getBoolean("flutter.protection_admin_enabled", false)
+        return prefs.getBoolean("flutter.protection_admin_enabled", false) &&
+               prefs.getBoolean("flutter.protection_active_admin", false)
     }
 
     private fun isPowerDialog(pkg: String, cls: String): Boolean {
@@ -97,6 +107,37 @@ class AlarmAccessibilityService : AccessibilityService() {
                 startActivity(intent)
             }
         }, 200)
+    }
+
+    private fun recordEscapeAttempt(reason: String, pkg: String, cls: String) {
+        val prefs = getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
+        val existing = prefs.getString("flutter.protection_escape_attempts", "[]")
+        val attempts = try {
+            JSONArray(existing)
+        } catch (_: Exception) {
+            JSONArray()
+        }
+
+        val alarmId = prefs.getInt("flutter.protection_active_alarm_id", -1)
+        val attempt = JSONObject()
+            .put("timestamp", System.currentTimeMillis())
+            .put("reason", reason)
+            .put("packageName", pkg)
+            .put("className", cls)
+        if (alarmId != -1) {
+            attempt.put("alarmId", alarmId)
+        }
+
+        val nextAttempts = JSONArray()
+        nextAttempts.put(attempt)
+        val maxPreviousAttempts = 19
+        for (i in 0 until minOf(attempts.length(), maxPreviousAttempts)) {
+            nextAttempts.put(attempts.get(i))
+        }
+        prefs.edit().putString(
+            "flutter.protection_escape_attempts",
+            nextAttempts.toString()
+        ).apply()
     }
 
     override fun onInterrupt() {}

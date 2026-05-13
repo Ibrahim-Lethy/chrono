@@ -12,6 +12,7 @@ enum AlarmTaskType {
   shake,
   memory,
   qrCode,
+  nfc,
 }
 
 typedef AlarmTaskBuilder = Widget Function(

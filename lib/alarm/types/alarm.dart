@@ -3,6 +3,7 @@ import 'package:clock_app/alarm/logic/alarm_reminder_notifications.dart';
 import 'package:clock_app/alarm/logic/schedule_alarm.dart';
 import 'package:clock_app/alarm/types/alarm_runner.dart';
 import 'package:clock_app/alarm/types/alarm_task.dart';
+import 'package:clock_app/alarm/types/protection_requirement.dart';
 import 'package:clock_app/alarm/types/range_interval.dart';
 import 'package:clock_app/alarm/types/schedules/alarm_schedule.dart';
 import 'package:clock_app/alarm/types/schedules/daily_alarm_schedule.dart';
@@ -86,6 +87,13 @@ class Alarm extends CustomizableListItem {
   double get volumeDuringTasks => _settings.getSetting("task_volume").value;
   double get snoozeLength => _settings.getSetting("Length").value;
   List<AlarmTask> get tasks => _settings.getSetting("Tasks").value;
+  ProtectionRequirement get protectionRequirement {
+    try {
+      return _settings.getSetting("Protection Requirement").value;
+    } catch (_) {
+      return ProtectionRequirement.none;
+    }
+  }
   List<Tag> get tags => _settings.getSetting("Tags").value;
   int get maxSnoozes => _settings.getSetting("Max Snoozes").value.toInt();
   bool get canBeDisabledWhenSnoozed =>

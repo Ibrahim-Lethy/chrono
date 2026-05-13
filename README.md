@@ -138,11 +138,16 @@ Use a physical Android device or an emulator with camera support:
 7. While an alarm notification screen is active, try to open the power menu. With power-off protection enabled and the Accessibility Service active, the app should close the power menu and relaunch itself.
 8. While an alarm notification screen is active, try to reach Android app-info, force-stop, uninstall, Device Admin deactivation, or Accessibility deactivation screens. With force-stop/uninstall protection enabled and the Accessibility Service active, the app should close common escape screens and relaunch itself.
 9. Dismiss or snooze the alarm and confirm the shared `alarm_active` state is cleared so the Accessibility Service stops blocking system screens.
+10. Open Settings > Protection > Diagnostics and confirm the status rows match the device state.
+11. Configure an alarm's protection requirement. Verify warning chips appear when required protections are not set up, and verify enabling/saving the alarm shows a setup warning.
+12. Add an NFC task, scan the NFC tag to save it, then confirm the same NFC tag is required when the alarm task runs.
+13. Review recent blocked attempts in Protection diagnostics after trying blocked power-menu or app-info flows.
 
 Limitations:
 
 - Android does not allow a normal Play Store app to fully prevent every force-stop or uninstall path. Device Admin adds uninstall/deactivation friction; Accessibility heuristics make common escape paths harder while an alarm task is active.
 - Power menu and Settings screens vary by Android version and device manufacturer, so physical-device testing is required.
+- NFC tag scanning can behave differently while the device is locked. Test NFC alarms on the exact device you plan to use before relying on them.
 
 ## Todo
 Stuff I would like to do soon™. In no particular order:

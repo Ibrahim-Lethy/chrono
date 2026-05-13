@@ -1,6 +1,7 @@
 import 'package:clock_app/common/widgets/card_container.dart';
 import 'package:clock_app/navigation/widgets/app_top_bar.dart';
 import 'package:clock_app/settings/data/protection_settings_schema.dart';
+import 'package:clock_app/settings/screens/protection_diagnostics_screen.dart';
 import 'package:clock_app/settings/widgets/protection_illustration.dart';
 import 'package:clock_app/system/native_features_service.dart';
 import 'package:clock_app/system/protection_preferences.dart';
@@ -174,6 +175,20 @@ class _ProtectionScreenState extends State<ProtectionScreen> with WidgetsBinding
                     ],
                   ),
                 ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                onPressed: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const ProtectionDiagnosticsScreen(),
+                    ),
+                  );
+                  _checkStatuses();
+                },
+                icon: const Icon(Icons.health_and_safety_outlined),
+                label: const Text("Run protection diagnostics"),
               ),
             ],
           ),

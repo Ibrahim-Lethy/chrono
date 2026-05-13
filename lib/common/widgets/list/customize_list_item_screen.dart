@@ -3,6 +3,7 @@ import 'package:clock_app/common/widgets/customize_screen.dart';
 import 'package:clock_app/settings/logic/get_setting_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:clock_app/alarm/types/alarm_task.dart';
+import 'package:clock_app/alarm/widgets/tasks/nfc_setup_widget.dart';
 import 'package:clock_app/alarm/widgets/tasks/qr_setup_widget.dart';
 import 'package:clock_app/settings/types/setting.dart';
 
@@ -65,6 +66,8 @@ class _CustomizeListItemScreenState<Item extends CustomizableListItem>
                           ),
                           if (item is AlarmTask && (item as AlarmTask).type == AlarmTaskType.qrCode)
                             QrSetupWidget(setting: item.settings.getSetting("Expected QR Content") as StringSetting),
+                          if (item is AlarmTask && (item as AlarmTask).type == AlarmTaskType.nfc)
+                            NfcSetupWidget(setting: item.settings.getSetting("Expected NFC Tag") as StringSetting),
                         ],
                       ),
                     ),
