@@ -18,8 +18,10 @@ import 'package:clock_app/common/widgets/list/customize_list_item_screen.dart';
 import 'package:clock_app/common/widgets/list/persistent_list_view.dart';
 import 'package:clock_app/common/widgets/time_picker.dart';
 import 'package:clock_app/navigation/types/quick_action_controller.dart';
+import 'package:clock_app/settings/screens/protection_screen.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
+import 'package:clock_app/system/protection_health.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -114,6 +116,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
 
   Future<void> _handleCustomizeAlarm(Alarm alarm) async {
     await _openCustomizeAlarmScreen(alarm, onSave: (newAlarm) async {
+      if (!await _confirmProtectionIssues(newAlarm)) return;
       // The alarm id changes for the new alarm, so we have to cancel the old one
       await alarm.cancel();
       alarm.copyFrom(newAlarm);
@@ -143,6 +146,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
           AppLocalizations.of(context)!.cannotDisableAlarmWhileSnoozedSnackbar,
           fab: true, navBar: true);
     } else {
+      if (value && !await _confirmProtectionIssues(alarm)) return;
       await alarm.setIsEnabled(value,
           "_handleEnableChangeAlarm(): Alarm enable set to $value by user");
       _listController.changeItems((alarms) {});
@@ -161,6 +165,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
             fab: true,
             navBar: true);
       } else {
+        if (value && !await _confirmProtectionIssues(alarm)) continue;
         await alarm.setIsEnabled(value,
             "_handleEnableChangeMultipleAlarms(): Alarm enable set to $value by user");
         _showNextScheduleSnackBar(alarm);
@@ -189,6 +194,61 @@ class _AlarmScreenState extends State<AlarmScreen> {
     await alarm.cancelSnooze();
     await alarm.update("_handleDismissAlarm(): Alarm dismissed by user");
     _listController.changeItems((alarms) {});
+  }
+
+  Future<bool> _confirmProtectionIssues(Alarm alarm) async {
+    final issues = await ProtectionHealth.getIssues(alarm);
+    if (issues.isEmpty || !mounted) return true;
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Protection needs setup"),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "This alarm has protection settings that are not ready:",
+                ),
+                const SizedBox(height: 12),
+                ...issues.map(
+                  (issue) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: Text("• ${issue.title}: ${issue.description}"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(false);
+                await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ProtectionScreen(),
+                  ),
+                );
+              },
+              child: const Text("Open protection"),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text("Continue anyway"),
+            ),
+          ],
+        );
+      },
+    );
+
+    return result ?? false;
   }
 
   void handleAddAlarmActon() {
@@ -229,6 +289,7 @@ class _AlarmScreenState extends State<AlarmScreen> {
       Alarm alarm = Alarm.fromTimeOfDay(timePickerResult.value);
       if (timePickerResult.isCustomize) {
         await _openCustomizeAlarmScreen(alarm, onSave: (newAlarm) async {
+          if (!await _confirmProtectionIssues(newAlarm)) return;
           _listController.addItem(newAlarm);
         }, isNewAlarm: true);
       } else {

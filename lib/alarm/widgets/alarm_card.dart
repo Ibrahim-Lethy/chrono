@@ -10,6 +10,7 @@ import 'package:clock_app/common/widgets/card_edit_menu.dart';
 import 'package:clock_app/common/widgets/clock/digital_clock_display.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/types/setting.dart';
+import 'package:clock_app/system/protection_health.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -91,6 +92,7 @@ class _AlarmCardState extends State<AlarmCard> {
     ThemeData theme = Theme.of(context);
     ColorScheme colorScheme = theme.colorScheme;
     TextTheme textTheme = theme.textTheme;
+    final protectionIssues = ProtectionHealth.getStaticIssues(widget.alarm);
 
     Widget getActionButton() {
       if (widget.alarm.isFinished) {
@@ -192,7 +194,16 @@ class _AlarmCardState extends State<AlarmCard> {
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  if (protectionIssues.isNotEmpty)
+                    Wrap(
+                      children: [
+                        ProtectionHealth.buildIssueChip(
+                          context,
+                          protectionIssues.first,
+                        ),
+                      ],
+                    ),
                 ],
               ),
             ),
