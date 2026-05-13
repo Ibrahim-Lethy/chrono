@@ -111,6 +111,31 @@ This app is built using flutter. To start developing:
 1. Follow [this](https://docs.flutter.dev/get-started/install) guide to install flutter and all required tools.
 2. Run the app by `flutter run --flavor dev`. For production builds, use `flutter build apk --release --split-per-abi --flavor prod`.
 
+### Verified Android build baseline
+
+The current Android build is verified with Flutter 3.22.2, Dart 3.4.3, Java 17, Android SDK 34, Gradle 7.6.4, Android Gradle Plugin 7.4.2, and Kotlin 1.8.0.
+
+Use these commands from the repository root:
+
+```sh
+flutter pub get
+flutter test
+flutter build apk --debug --flavor dev
+```
+
+`flutter analyze` should not report build-blocking errors, but this fork still has pre-existing warnings and info-level lints. Local release builds require signing inputs at `android/key.properties` and `android/app/release-key.jks`; CI creates those files from secrets before running release builds.
+
+### QR task and protection verification checklist
+
+Use a physical Android device or an emulator with camera support:
+
+1. Create or edit an alarm and add the QR task.
+2. Open the QR task customization screen, tap the QR setup control, scan a QR code, and confirm the saved value snackbar appears.
+3. Use the task try flow or let the alarm fire. Scanning the same QR payload should complete the task; scanning a different QR payload should show the wrong-code message.
+4. Open Settings > Protection, enable Device Admin, and confirm the status changes to active after returning to the app.
+5. Open Accessibility settings from the Protection screen, enable the Chrono service, and confirm the status changes after returning.
+6. While an alarm notification screen is active, confirm the app sets the shared `alarm_active` flag and that the accessibility service only attempts power-menu interception during that active alarm window.
+
 ## Todo
 Stuff I would like to do soon™. In no particular order:
 - Alarms
