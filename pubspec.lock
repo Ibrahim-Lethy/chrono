@@ -37,7 +37,7 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/android_alarm_manager_plus"
-      ref: alarm_show_intent
+      ref: ae6c11c3eccd66ff79827424cbf8c208f727282e
       resolved-ref: ae6c11c3eccd66ff79827424cbf8c208f727282e
       url: "https://github.com/AhsanSarwar45/plus_plugins"
     source: git
@@ -318,7 +318,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
+      ref: af031177e8cf6ff7cf077ca9cf2bc9fb0e4a76f4
       resolved-ref: af031177e8cf6ff7cf077ca9cf2bc9fb0e4a76f4
       url: "https://github.com/vicolo-dev/flex_color_picker"
     source: git
@@ -364,7 +364,7 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
+      ref: "6ab85aadb67e68377ec14beefe7ba7ea7fb34caa"
       resolved-ref: "6ab85aadb67e68377ec14beefe7ba7ea7fb34caa"
       url: "https://github.com/vicolo-dev/flutter_foreground_task"
     source: git
@@ -532,7 +532,7 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/home_widget"
-      ref: main
+      ref: "28bf6db2761467209a5244971ccb803a50a8cbb0"
       resolved-ref: "28bf6db2761467209a5244971ccb803a50a8cbb0"
       url: "https://github.com/AhsanSarwar45/home_widget"
     source: git
@@ -713,6 +713,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.6"
+  mobile_scanner:
+    dependency: "direct main"
+    description:
+      name: mobile_scanner
+      sha256: "0b466a0a8a211b366c2e87f3345715faef9b6011c7147556ad22f37de6ba3173"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.11"
   move_to_background:
     dependency: "direct main"
     description:
@@ -962,7 +970,7 @@ packages:
     source: hosted
     version: "0.27.7"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       sha256: d3bbe5553a986e83980916ded2f0b435ef2e1893dfaa29d5a7a790d0eca12180

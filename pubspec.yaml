@@ -14,7 +14,7 @@ dependencies:
   flutter_boot_receiver: ^1.1.0
   flutter_localizations:
     sdk: flutter
-  intl: any
+  intl: ^0.19.0
   # flutter_boot_receiver:
   #   path: "../flutter_boot_receiver"
   timezone: ^0.9.1
@@ -30,7 +30,7 @@ dependencies:
     git:
       url: https://github.com/AhsanSarwar45/plus_plugins
       path: packages/android_alarm_manager_plus
-      ref: alarm_show_intent
+      ref: ae6c11c3eccd66ff79827424cbf8c208f727282e
   just_audio: ^0.9.31
   awesome_notifications: ^0.9.3
   # awesome_notifications:
@@ -40,6 +40,7 @@ dependencies:
   move_to_background: ^1.0.2
   vibration: ^1.7.6
   get_storage: ^2.1.1
+  shared_preferences: ^2.2.3
   queue: ^3.1.0+2
   table_calendar: ^3.0.8
   vector_math: ^2.1.4
@@ -52,7 +53,7 @@ dependencies:
   flex_color_picker:
     git:
       url: https://github.com/vicolo-dev/flex_color_picker
-      ref: master
+      ref: af031177e8cf6ff7cf077ca9cf2bc9fb0e4a76f4
   url_launcher: ^6.2.2
   flutter_html: ^3.0.0-beta.2
   http: ^0.13.6
@@ -70,7 +71,7 @@ dependencies:
   home_widget:
      git:
       url: https://github.com/AhsanSarwar45/home_widget
-      ref: main
+      ref: 28bf6db2761467209a5244971ccb803a50a8cbb0
       path: packages/home_widget/
   permission_handler: ^11.3.1
   device_info_plus: ^10.1.0
@@ -78,7 +79,7 @@ dependencies:
     # path: "../flutter_foreground_task"
     git:
       url: https://github.com/vicolo-dev/flutter_foreground_task
-      ref: master
+      ref: 6ab85aadb67e68377ec14beefe7ba7ea7fb34caa
   logger: ^2.4.0
   flutter_animate: ^4.5.0
   quick_actions: ^1.0.7
@@ -88,7 +89,7 @@ dependencies:
   mime: ^1.0.6
   analog_clock: ^0.1.1
   animated_analog_clock: ^0.1.0
-  mobile_scanner: ^7.2.0
+  mobile_scanner: ^6.0.11
   # animated_reorderable_list: ^1.1.1
   # animated_reorderable_list:
     # path: "../animated_reorderable_list"
@@ -101,9 +102,6 @@ dev_dependencies:
   dart_code_metrics: ^5.5.1
   change_app_package_name: ^1.1.0
   dependency_validator: ^3.2.3
-
-dependency_overrides:
-  intl: any
 
 flutter:
   generate: true
