@@ -4,6 +4,16 @@ allprojects {
         mavenCentral()
         maven { url "${project(':background_fetch').projectDir}/libs" }
     }
+
+    configurations.all {
+        resolutionStrategy {
+            force "com.transistorsoft:tsbackgroundfetch:1.0.4"
+            force "androidx.lifecycle:lifecycle-runtime:2.7.0"
+            force "androidx.lifecycle:lifecycle-livedata:2.7.0"
+            force "androidx.lifecycle:lifecycle-livedata-core:2.7.0"
+            force "androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0"
+        }
+    }
 }
 
 rootProject.buildDir = '../build'

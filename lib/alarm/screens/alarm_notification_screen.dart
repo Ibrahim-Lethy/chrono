@@ -12,8 +12,8 @@ import 'package:clock_app/notifications/types/alarm_notification_arguments.dart'
 import 'package:clock_app/navigation/types/alignment.dart';
 import 'package:clock_app/notifications/widgets/notification_actions/slide_notification_action.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
+import 'package:clock_app/system/protection_runtime.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AlarmNotificationScreen extends StatefulWidget {
   const AlarmNotificationScreen({
@@ -46,6 +46,7 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
             ?.send([alarm.volume]);
         _currentWidget = actionWidget;
       } else if (_currentIndex >= alarm.tasks.length) {
+        ProtectionRuntime.clear();
         if (widget.onPop != null) {
           widget.onPop!();
           Navigator.of(context).pop(true);
@@ -66,15 +67,19 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((p) => p.setBool('alarm_active', true));
 
     Alarm? currentAlarm = getAlarmById(widget.scheduleId);
     if (currentAlarm == null) {
+      ProtectionRuntime.clear();
       dismissAlarmNotification(widget.scheduleId, widget.dismissType,
           ScheduledNotificationType.alarm);
       return;
     }
     alarm = currentAlarm;
+    ProtectionRuntime.activateForAlarm(
+      scheduleId: widget.scheduleId,
+      tasksActive: alarm.tasks.isNotEmpty,
+    );
 
     try {
       actionWidget = appSettings
@@ -98,13 +103,14 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
   }
 
   void _snoozeAlarm() {
+    ProtectionRuntime.clear();
     dismissAlarmNotification(widget.scheduleId, AlarmDismissType.snooze,
         ScheduledNotificationType.alarm);
   }
 
   @override
   void dispose() {
-    SharedPreferences.getInstance().then((p) => p.setBool('alarm_active', false));
+    ProtectionRuntime.clear();
     super.dispose();
   }
 

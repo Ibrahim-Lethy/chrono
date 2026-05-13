@@ -111,6 +111,39 @@ This app is built using flutter. To start developing:
 1. Follow [this](https://docs.flutter.dev/get-started/install) guide to install flutter and all required tools.
 2. Run the app by `flutter run --flavor dev`. For production builds, use `flutter build apk --release --split-per-abi --flavor prod`.
 
+### Verified Android build baseline
+
+The current Android build is verified with Flutter 3.22.2, Dart 3.4.3, Java 17, Android SDK 34, Gradle 7.6.4, Android Gradle Plugin 7.4.2, and Kotlin 1.8.0.
+
+Use these commands from the repository root:
+
+```sh
+flutter pub get
+flutter test
+flutter build apk --debug --flavor dev
+```
+
+`flutter analyze` should not report build-blocking errors, but this fork still has pre-existing warnings and info-level lints. Local release builds require signing inputs at `android/key.properties` and `android/app/release-key.jks`; CI creates those files from secrets before running release builds.
+
+### Advanced CAPTCHA protection verification checklist
+
+Use a physical Android device or an emulator with camera support:
+
+1. Create or edit an alarm and add the QR task.
+2. Open the QR task customization screen, tap the QR setup control, scan a QR code, and confirm the saved value snackbar appears.
+3. Use the task try flow or let the alarm fire. Scanning the same QR payload should complete the task; scanning a different QR payload should show the wrong-code message.
+4. During first-run onboarding, verify the "CAPTCHA No cheating", "Device admin", and "Accessibility service" education pages are shown and that Agree opens the correct Android permission screen.
+5. Open Settings > Protection. Enable "Power off protection"; if Accessibility is not enabled, the app should open Android Accessibility settings.
+6. Enable "Force stop and uninstall protection"; if Device Admin is not active, the app should open the Android Device Admin activation screen. If Device Admin is already active but Accessibility is missing, it should open Accessibility settings.
+7. While an alarm notification screen is active, try to open the power menu. With power-off protection enabled and the Accessibility Service active, the app should close the power menu and relaunch itself.
+8. While an alarm notification screen is active, try to reach Android app-info, force-stop, uninstall, Device Admin deactivation, or Accessibility deactivation screens. With force-stop/uninstall protection enabled and the Accessibility Service active, the app should close common escape screens and relaunch itself.
+9. Dismiss or snooze the alarm and confirm the shared `alarm_active` state is cleared so the Accessibility Service stops blocking system screens.
+
+Limitations:
+
+- Android does not allow a normal Play Store app to fully prevent every force-stop or uninstall path. Device Admin adds uninstall/deactivation friction; Accessibility heuristics make common escape paths harder while an alarm task is active.
+- Power menu and Settings screens vary by Android version and device manufacturer, so physical-device testing is required.
+
 ## Todo
 Stuff I would like to do soon™. In no particular order:
 - Alarms
