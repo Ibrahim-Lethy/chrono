@@ -2,6 +2,8 @@ import 'package:clock_app/common/logic/card_decoration.dart';
 import 'package:clock_app/navigation/screens/nav_scaffold.dart';
 import 'package:clock_app/settings/data/settings_schema.dart';
 import 'package:clock_app/settings/screens/settings_group_screen.dart';
+import 'package:clock_app/settings/widgets/protection_illustration.dart';
+import 'package:clock_app/system/native_features_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -23,6 +25,14 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
     );
   }
 
+  Future<void> _requestDeviceAdmin() async {
+    await NativeFeaturesService.requestDeviceAdmin();
+  }
+
+  Future<void> _openAccessibilitySettings() async {
+    await NativeFeaturesService.openAccessibilitySettings();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -41,6 +51,100 @@ class OnBoardingScreenState extends State<OnBoardingScreen> {
       autoScrollDuration: 3000,
       infiniteAutoScroll: true,
       pages: [
+        PageViewModel(
+          title: "CAPTCHA No cheating",
+          bodyWidget: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(child: ProtectionIllustration(size: 220)),
+              const SizedBox(height: 24),
+              Text(
+                "Make alarm tasks harder to bypass",
+                style: textTheme.titleMedium?.copyWith(
+                  color: colorScheme.onBackground,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Advanced protection combines QR and other alarm tasks with Android Device Admin and Accessibility permissions. It cannot make cheating impossible, but it can make common escape paths much harder while an alarm is active.",
+                style: textTheme.bodyLarge,
+              ),
+            ],
+          ),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Device admin",
+          bodyWidget: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(child: ProtectionIllustration(size: 220)),
+              const SizedBox(height: 24),
+              Text(
+                "Force stop and uninstall protection",
+                style: textTheme.titleMedium?.copyWith(
+                  color: colorScheme.onBackground,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Device Admin adds an extra Android confirmation before the app can be removed. You can revoke it later from the app's Protection settings.",
+                style: textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _requestDeviceAdmin,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                child: Text(
+                  'Agree',
+                  style: TextStyle(color: colorScheme.onPrimary),
+                ),
+              ),
+            ],
+          ),
+          decoration: pageDecoration,
+        ),
+        PageViewModel(
+          title: "Accessibility service",
+          bodyWidget: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(child: ProtectionIllustration(size: 220)),
+              const SizedBox(height: 24),
+              Text(
+                "Block common cheating paths",
+                style: textTheme.titleMedium?.copyWith(
+                  color: colorScheme.onBackground,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "The Accessibility Service can close power-off and app-settings screens while an alarm task is active. It is used only for alarm protection; no private information is collected.",
+                style: textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _openAccessibilitySettings,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                child: Text(
+                  'Agree',
+                  style: TextStyle(color: colorScheme.onPrimary),
+                ),
+              ),
+            ],
+          ),
+          decoration: pageDecoration,
+        ),
         PageViewModel(
           title: "",
           bodyWidget: Column(
