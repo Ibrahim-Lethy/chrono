@@ -1,6 +1,7 @@
 import 'package:audio_session/audio_session.dart';
 import 'package:clock_app/alarm/data/alarm_task_schemas.dart';
 import 'package:clock_app/alarm/types/alarm_task.dart';
+import 'package:clock_app/alarm/types/protection_requirement.dart';
 import 'package:clock_app/alarm/types/range_interval.dart';
 import 'package:clock_app/alarm/types/schedules/daily_alarm_schedule.dart';
 import 'package:clock_app/alarm/types/schedules/dates_alarm_schedule.dart';
@@ -28,7 +29,7 @@ import 'package:clock_app/timer/types/time_duration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-const alarmSchemaVersion = 5;
+const alarmSchemaVersion = 6;
 
 SettingGroup alarmSettingsSchema = SettingGroup(
   version: alarmSchemaVersion,
@@ -312,6 +313,40 @@ SettingGroup alarmSettingsSchema = SettingGroup(
         return Text("${setting.value.length} tasks");
       },
       itemPreviewBuilder: (item) => TryAlarmTaskButton(alarmTask: item),
+    ),
+    SelectSetting<ProtectionRequirement>(
+      "Protection Requirement",
+      (context) => "Protection requirement",
+      [
+        SelectSettingOption(
+          (context) => ProtectionRequirement.none.displayName(context),
+          ProtectionRequirement.none,
+          getDescription: (context) =>
+              ProtectionRequirement.none.description(context),
+        ),
+        SelectSettingOption(
+          (context) => ProtectionRequirement.powerOff.displayName(context),
+          ProtectionRequirement.powerOff,
+          getDescription: (context) =>
+              ProtectionRequirement.powerOff.description(context),
+        ),
+        SelectSettingOption(
+          (context) =>
+              ProtectionRequirement.forceStopUninstall.displayName(context),
+          ProtectionRequirement.forceStopUninstall,
+          getDescription: (context) =>
+              ProtectionRequirement.forceStopUninstall.description(context),
+        ),
+        SelectSettingOption(
+          (context) => ProtectionRequirement.all.displayName(context),
+          ProtectionRequirement.all,
+          getDescription: (context) =>
+              ProtectionRequirement.all.description(context),
+        ),
+      ],
+      getDescription: (context) =>
+          "Require no-cheating protections while this alarm is ringing.",
+      searchTags: ["protection", "captcha", "cheating", "qr", "nfc"],
     ),
     DynamicMultiSelectSetting<Tag>(
       "Tags",

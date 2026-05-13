@@ -79,6 +79,7 @@ class _AlarmNotificationScreenState extends State<AlarmNotificationScreen> {
     ProtectionRuntime.activateForAlarm(
       scheduleId: widget.scheduleId,
       tasksActive: alarm.tasks.isNotEmpty,
+      requirement: alarm.protectionRequirement,
     );
 
     try {
