@@ -14,8 +14,8 @@ class ProtectionDiagnosticsScreen extends StatefulWidget {
       _ProtectionDiagnosticsScreenState();
 }
 
-class _ProtectionDiagnosticsScreenState extends State<ProtectionDiagnosticsScreen>
-    with WidgetsBindingObserver {
+class _ProtectionDiagnosticsScreenState
+    extends State<ProtectionDiagnosticsScreen> with WidgetsBindingObserver {
   bool _deviceAdminActive = false;
   bool _accessibilityEnabled = false;
   bool _alarmActive = false;

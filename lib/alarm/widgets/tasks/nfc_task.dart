@@ -62,7 +62,8 @@ class _NfcTaskState extends State<NfcTask> {
         final tagId = getNfcTagId(tag);
         if (tagId == _expectedTagId) {
           _isSolved = true;
-          await NfcManager.instance.stopSession(alertMessage: "NFC tag matched");
+          await NfcManager.instance
+              .stopSession(alertMessage: "NFC tag matched");
           if (!mounted) return;
           widget.onSolve();
         } else if (mounted) {
@@ -98,7 +99,8 @@ class _NfcTaskState extends State<NfcTask> {
                   Icon(
                     Icons.nfc,
                     size: 96,
-                    color: _isAvailable ? null : Theme.of(context).disabledColor,
+                    color:
+                        _isAvailable ? null : Theme.of(context).disabledColor,
                   ),
                   const SizedBox(height: 16),
                   Text(

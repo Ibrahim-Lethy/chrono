@@ -14,7 +14,8 @@ void _collectIdentifiers(dynamic value, List<String> candidates) {
       final key = entry.key.toString().toLowerCase();
       final entryValue = entry.value;
       if ((key == 'identifier' || key == 'id') && entryValue is List) {
-        final bytes = entryValue.whereType<num>().map((e) => e.toInt()).toList();
+        final bytes =
+            entryValue.whereType<num>().map((e) => e.toInt()).toList();
         if (bytes.isNotEmpty) {
           candidates.add(
             bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join(),

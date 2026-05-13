@@ -96,7 +96,8 @@ class ProtectionHealth {
     return false;
   }
 
-  static Widget buildIssueChip(BuildContext context, ProtectionHealthIssue issue) {
+  static Widget buildIssueChip(
+      BuildContext context, ProtectionHealthIssue issue) {
     final colorScheme = Theme.of(context).colorScheme;
     return Container(
       margin: const EdgeInsets.only(top: 6, right: 6),

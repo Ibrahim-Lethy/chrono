@@ -35,7 +35,8 @@ extension ProtectionRequirementDetails on ProtectionRequirement {
   }
 
   bool get requiresPowerOffProtection =>
-      this == ProtectionRequirement.powerOff || this == ProtectionRequirement.all;
+      this == ProtectionRequirement.powerOff ||
+      this == ProtectionRequirement.all;
 
   bool get requiresForceStopUninstallProtection =>
       this == ProtectionRequirement.forceStopUninstall ||
